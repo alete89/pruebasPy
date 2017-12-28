@@ -10,6 +10,8 @@ class Window(QtGui.QWidget):
         QtGui.QWidget.__init__(self)
         
         self.table = QtGui.QTableWidget(rows, columns, self)
+        self.table.setSortingEnabled(True)
+        self.header = []
 
         # Buttons
         self.buttonOpen = QtGui.QPushButton('Open', self)
@@ -28,6 +30,7 @@ class Window(QtGui.QWidget):
         if not path.isEmpty():
             with open(unicode(path), 'wb') as stream:
                 writer = csv.writer(stream, delimiter=';')
+                writer.writerow(self.header)
                 for row in range(self.table.rowCount()):
                     rowdata = []
                     for column in range(self.table.columnCount()):
@@ -46,13 +49,17 @@ class Window(QtGui.QWidget):
             with open(unicode(path), 'rb') as stream:
                 self.table.setRowCount(0)
                 self.table.setColumnCount(0)
-                for rowdata in csv.reader(stream, delimiter=';'):
+                reader = csv.reader(stream, delimiter=';')
+                self.header = reader.next()
+                for rowdata in reader:
                     row = self.table.rowCount()
                     self.table.insertRow(row)
                     self.table.setColumnCount(len(rowdata))
                     for column, data in enumerate(rowdata):
                         item = QtGui.QTableWidgetItem(data.decode('utf8'))
                         self.table.setItem(row, column, item)
+                self.table.setHorizontalHeaderLabels(self.header)
+
 
 if __name__ == '__main__':
 
