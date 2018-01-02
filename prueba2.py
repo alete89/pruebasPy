@@ -17,11 +17,12 @@ class Window(QtGui.QWidget):
         # Buttons
         self.buttonGetData = QtGui.QPushButton('getdatafromcsv', self)
         self.buttonOpen = QtGui.QPushButton('Open (show all records)', self)
-        self.buttonMenu = QtGui.QPushButton('Filtro Menu', self)
+        self.buttonFiltro = QtGui.QPushButton('Filtro', self)
         self.buttonSave = QtGui.QPushButton('Save', self)
         self.buttonOpen.clicked.connect(self.getDataFromCsv)
         self.buttonOpen.clicked.connect(self.ShowDataSet)
-        self.buttonMenu.clicked.connect(self.menuFilter)
+        self.buttonFiltro.clicked.connect(lambda: self.dataFilter(2, '28'))
+        self.buttonFiltro.clicked.connect(self.ShowDataSet)
         self.buttonSave.clicked.connect(self.SaveCSV)
 
         # Layout
@@ -29,7 +30,7 @@ class Window(QtGui.QWidget):
         layout.addWidget(self.table)
         layout.addWidget(self.buttonGetData)
         layout.addWidget(self.buttonOpen)
-        layout.addWidget(self.buttonMenu)
+        layout.addWidget(self.buttonFiltro)
         layout.addWidget(self.buttonSave)
 
     def SaveCSV(self):
@@ -71,11 +72,13 @@ class Window(QtGui.QWidget):
                 self.table.setItem(row, column, item)
         self.table.setHorizontalHeaderLabels(self.getHeader(self.currentPath))
 
-    def menuFilter(self, columna, valor):
+    def dataFilter(self, columna, valor):
         # SELECT DISTINCT SubMenu,Coordenada FROM TablaDeSecuencias where Menu="unmenu" and SubMenu is not null order by Coordenada
-
-
-        pass
+        filteredDataSet = []
+        for rowdata in self.dataSet:
+            if rowdata[columna] == valor:
+                filteredDataSet.append(rowdata)
+        self.dataSet = filteredDataSet
 
     def getHeader(self, path):
         with open(unicode(path), 'rb') as stream:
