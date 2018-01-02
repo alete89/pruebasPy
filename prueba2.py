@@ -11,21 +11,23 @@ class Window(QtGui.QWidget):
         
         self.table = QtGui.QTableWidget(rows, columns, self)
         self.table.setSortingEnabled(True)
-        self.header = []
 
         # Buttons
-        self.buttonOpen = QtGui.QPushButton('Open', self)
+        self.buttonOpen = QtGui.QPushButton('Open (show all records)', self)
+        self.buttonMenu = QtGui.QPushButton('Filtro Menu', self)
         self.buttonSave = QtGui.QPushButton('Save', self)
-        self.buttonOpen.clicked.connect(self.handleOpen)
-        self.buttonSave.clicked.connect(self.handleSave)
+        self.buttonOpen.clicked.connect(self.ShowAllRecords)
+        self.buttonMenu.clicked.connect(self.menuFilter)
+        self.buttonSave.clicked.connect(self.SaveCSV)
 
         # Layout
         layout = QtGui.QVBoxLayout(self)
         layout.addWidget(self.table)
         layout.addWidget(self.buttonOpen)
+        layout.addWidget(self.buttonMenu)
         layout.addWidget(self.buttonSave)
 
-    def handleSave(self):
+    def SaveCSV(self):
         path = QtGui.QFileDialog.getSaveFileName(self, 'Save File', '', 'CSV(*.csv)')
         if not path.isEmpty():
             with open(unicode(path), 'wb') as stream:
@@ -42,15 +44,14 @@ class Window(QtGui.QWidget):
                             rowdata.append('')
                     writer.writerow(rowdata)
 
-    def handleOpen(self):
-        path = QtGui.QFileDialog.getOpenFileName(
-                self, 'Open File', '', 'CSV(*.csv)')
+    def ShowAllRecords(self):
+        path = QtGui.QFileDialog.getOpenFileName(self, 'Open File', '', 'CSV(*.csv)')
         if not path.isEmpty():
             with open(unicode(path), 'rb') as stream:
                 self.table.setRowCount(0)
                 self.table.setColumnCount(0)
                 reader = csv.reader(stream, delimiter=';')
-                self.header = reader.next()
+                reader.next()
                 for rowdata in reader:
                     row = self.table.rowCount()
                     self.table.insertRow(row)
@@ -58,7 +59,31 @@ class Window(QtGui.QWidget):
                     for column, data in enumerate(rowdata):
                         item = QtGui.QTableWidgetItem(data.decode('utf8'))
                         self.table.setItem(row, column, item)
-                self.table.setHorizontalHeaderLabels(self.header)
+            self.table.setHorizontalHeaderLabels(self.getHeader(path))
+
+    def menuFilter(self):
+        path = QtGui.QFileDialog.getOpenFileName(self, 'Open File', '', 'CSV(*.csv)')
+        if not path.isEmpty():
+            with open(unicode(path), 'rb') as stream:
+                self.table.setRowCount(0)
+                self.table.setColumnCount(0)
+                reader = csv.reader(stream, delimiter=';')
+                reader.next()
+                for rowdata in reader:
+                    row = self.table.rowCount()
+                    self.table.insertRow(row)
+                    self.table.setColumnCount(len(rowdata))
+                    for column, data in enumerate(rowdata):
+                        item = QtGui.QTableWidgetItem(data.decode('utf8'))
+                        self.table.setItem(row, column, item)
+            self.table.setHorizontalHeaderLabels(self.getHeader(path))
+
+    def getHeader(self, path):
+        with open(unicode(path), 'rb') as stream:
+                reader = csv.reader(stream, delimiter=';')
+                header = reader.next()
+                return header
+
 
 
 if __name__ == '__main__':
