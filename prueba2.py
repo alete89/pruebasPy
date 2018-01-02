@@ -21,7 +21,9 @@ class Window(QtGui.QWidget):
         self.buttonSave = QtGui.QPushButton('Save', self)
         self.buttonOpen.clicked.connect(self.getDataFromCsv)
         self.buttonOpen.clicked.connect(self.ShowDataSet)
-        self.buttonFiltro.clicked.connect(lambda: self.dataFilter(2, '28'))
+        # self.buttonFiltro.clicked.connect(lambda: self.dataFilter(2, '28'))
+        self.buttonFiltro.clicked.connect(self.sortDataSet)
+        
         self.buttonFiltro.clicked.connect(self.ShowDataSet)
         self.buttonSave.clicked.connect(self.SaveCSV)
 
@@ -86,6 +88,9 @@ class Window(QtGui.QWidget):
                 header = reader.next()
                 return header
 
+    def sortDataSet(self):
+        self.dataSet = sorted(self.dataSet, key=lambda x: x[2], reverse=False)
+        self.ShowDataSet
 
 
 if __name__ == '__main__':
