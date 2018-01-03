@@ -24,6 +24,12 @@ class Window(QtGui.QWidget):
         self.buttonOpen.clicked.connect(self.load)
         self.buttonOpen.clicked.connect(self.ShowDataSet)
 
+        self.buttonFiltro.clicked.connect(self.filter)
+        self.buttonFiltro.clicked.connect(self.ShowDataSet)
+
+        self.buttonOrder.clicked.connect(self.sort)
+        self.buttonOrder.clicked.connect(self.ShowDataSet)
+
         
         # Layout
         layout = QtGui.QVBoxLayout(self)
@@ -37,8 +43,13 @@ class Window(QtGui.QWidget):
     def load(self):
         self.currentPath = QtGui.QFileDialog.getOpenFileName(self, 'Open File', '', 'CSV(*.csv)')
         if not self.currentPath.isEmpty():
-            self.dataSet = csvdb.getDataFromCsv(self.currentPath)
+            self.dataSet = csvdb.getDataFromCsv(self, self.currentPath)
 
+    def sort(self):
+        self.dataSet = csvdb.sortDataSet(self,self.dataSet,2)
+
+    def filter(self):
+        self.dataSet = csvdb.dataFilter(self,self.dataSet,1,"dini")
 
     def ShowDataSet(self):
         self.table.setRowCount(0)
@@ -50,7 +61,7 @@ class Window(QtGui.QWidget):
             for column, data in enumerate(rowdata):
                 item = QtGui.QTableWidgetItem(data.decode('utf8'))
                 self.table.setItem(row, column, item)
-        self.table.setHorizontalHeaderLabels(csvdb.getHeader(self.currentPath))
+        self.table.setHorizontalHeaderLabels(csvdb.getHeader(self, self.currentPath))
 
 
 if __name__ == '__main__':
