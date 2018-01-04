@@ -8,12 +8,12 @@ def SaveCSV(path, dataset, header):
     with open(unicode(path), 'wb') as stream:
         writer = csv.writer(stream, delimiter=';')
         writer.writerow(header)
-        for row in range(dataset):
+        for row in range(len(dataset)):
             rowdata = []
             for column in range(len(dataset[0])):
                 item = dataset[row][column]
                 if item is not None:
-                    rowdata.append(unicode(item.text()).encode('utf8'))
+                    rowdata.append(unicode(item).encode('utf8'))
                 else:
                     rowdata.append('')
             writer.writerow(rowdata)
@@ -44,12 +44,3 @@ def getHeader(path):
 def sortDataSet(dataset, column, invertido=False):
     sortedDataSet = sorted(dataset, key=lambda col: col[column], reverse=invertido)
     return sortedDataSet
-
-
-if __name__ == '__main__':
-
-    app = QtGui.QApplication(sys.argv)
-    window = Window(0, 0)
-    window.resize(640, 480)
-    window.show()
-    sys.exit(app.exec_())

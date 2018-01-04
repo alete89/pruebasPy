@@ -30,6 +30,8 @@ class Window(QtGui.QWidget):
         self.buttonOrder.clicked.connect(self.sort)
         self.buttonOrder.clicked.connect(self.ShowDataSet)
 
+        self.buttonSave.clicked.connect(self.save)
+
         
         # Layout
         layout = QtGui.QVBoxLayout(self)
@@ -62,6 +64,11 @@ class Window(QtGui.QWidget):
                 item = QtGui.QTableWidgetItem(data.decode('utf8'))
                 self.table.setItem(row, column, item)
         self.table.setHorizontalHeaderLabels(csvdb.getHeader(self.currentPath))
+
+    def save(self):
+        path = QtGui.QFileDialog.getSaveFileName(self, 'Save File', '', 'CSV(*.csv)')
+        if not path.isEmpty():
+            csvdb.SaveCSV(path, self.dataSet, csvdb.getHeader(self.currentPath))
 
 
 if __name__ == '__main__':
