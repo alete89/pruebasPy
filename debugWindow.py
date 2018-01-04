@@ -51,7 +51,7 @@ class Window(QtGui.QWidget):
         self.dataSet = csvdb.sortDataSet(self.dataSet,2)
 
     def filter(self):
-        self.dataSet = csvdb.dataFilter(self.dataSet,1,"dini")
+        self.dataSet = csvdb.dataFilter(self.dataSet,1,self.gettext())
 
     def ShowDataSet(self):
         self.table.setRowCount(0)
@@ -69,6 +69,11 @@ class Window(QtGui.QWidget):
         path = QtGui.QFileDialog.getSaveFileName(self, 'Save File', '', 'CSV(*.csv)')
         if not path.isEmpty():
             csvdb.SaveCSV(path, self.dataSet, csvdb.getHeader(self.currentPath))
+
+    def gettext(self):
+      text, ok = QtGui.QInputDialog.getText(self, 'Filtrar por apellido', 'entrar apellido:')
+      if ok:
+          return str(text)
 
 
 if __name__ == '__main__':
