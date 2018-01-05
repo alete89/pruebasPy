@@ -6,6 +6,7 @@ el parámetro delimiter=';' está seteado así porque la configuración internac
 usa ';' por defecto como separador de columnas en un CSV. Tras unificar criterios ese caracter
 se puede cambiar por ',' o el que nosotros elijamos.
 '''
+
 import sys, csv
 
 COLUMN_DELIMITER = ';'
