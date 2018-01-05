@@ -11,7 +11,7 @@ import sys, csv
 
 COLUMN_DELIMITER = ';'
 
-def SaveCSV(path, dataset, header):
+def SaveCSV(path, dataset, header): 
     with open(unicode(path), 'wb') as stream:
         writer = csv.writer(stream, delimiter=COLUMN_DELIMITER)
         writer.writerow(header)
