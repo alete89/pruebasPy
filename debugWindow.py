@@ -51,6 +51,7 @@ class Window(QtGui.QWidget):
         self.dataSet = csvdb.sortDataSet(self.dataSet,2)
 
     def filter(self):
+    # A modo de demostración, sólo filtra por la columna apellido
         self.dataSet = csvdb.dataFilter(self.dataSet,1,self.gettext())
 
     def ShowDataSet(self):
