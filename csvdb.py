@@ -50,6 +50,9 @@ def distinct(dataset, columna):
             filteredDataSet.append(rowdata)
     return filteredDataSet
 
+def getColumn(dataset, columna):
+    return [fila[columna] for fila in dataset]
+
 def getHeader(path):
     with open(unicode(path), 'rb') as stream:
             reader = csv.reader(stream, delimiter=COLUMN_DELIMITER)
