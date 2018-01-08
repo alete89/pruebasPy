@@ -9,7 +9,7 @@ se puede cambiar por ',' o el que nosotros elijamos.
 
 import sys, csv
 
-COLUMN_DELIMITER = ';'
+COLUMN_DELIMITER = ','
 
 def SaveCSV(path, dataset, header): 
     with open(unicode(path), 'wb') as stream:
@@ -40,6 +40,13 @@ def dataFilter(dataset, columna, valor):
     filteredDataSet = []
     for rowdata in dataset:
         if rowdata[columna] == valor:
+            filteredDataSet.append(rowdata)
+    return filteredDataSet
+
+def distinct(dataset, columna):
+    filteredDataSet = []
+    for rowdata in dataset:
+        if rowdata[columna] not in [fila[columna] for fila in filteredDataSet]:
             filteredDataSet.append(rowdata)
     return filteredDataSet
 
