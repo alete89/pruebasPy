@@ -16,7 +16,7 @@ class Window(QtGui.QWidget):
 
         # Buttons
         self.buttonOpen = QtGui.QPushButton('Open', self)
-        self.buttonFiltro = QtGui.QPushButton('Filter', self)
+        self.buttonFiltro = QtGui.QPushButton('Filter distinct', self)
         self.buttonOrder = QtGui.QPushButton('Order', self)
         self.buttonSave = QtGui.QPushButton('Save', self)
         
@@ -24,7 +24,7 @@ class Window(QtGui.QWidget):
         self.buttonOpen.clicked.connect(self.load)
         self.buttonOpen.clicked.connect(self.ShowDataSet)
 
-        self.buttonFiltro.clicked.connect(self.filter)
+        self.buttonFiltro.clicked.connect(self.distinct)
         self.buttonFiltro.clicked.connect(self.ShowDataSet)
 
         self.buttonOrder.clicked.connect(self.sort)
@@ -50,8 +50,11 @@ class Window(QtGui.QWidget):
     def sort(self):
         self.dataSet = csvdb.sortDataSet(self.dataSet,2)
 
+    def distinct(self):
+        self.dataSet = csvdb.distinct(self.dataSet,1)
+
     def filter(self):
-    # A modo de demostración, sólo filtra por la columna apellido
+    # A modo de demostración, sólo filtra por la columna 1 (segunda)
         self.dataSet = csvdb.dataFilter(self.dataSet,1,self.gettext())
 
     def ShowDataSet(self):
@@ -72,7 +75,7 @@ class Window(QtGui.QWidget):
             csvdb.SaveCSV(path, self.dataSet, csvdb.getHeader(self.currentPath))
 
     def gettext(self):
-      text, ok = QtGui.QInputDialog.getText(self, 'Filtrar por apellido', 'entrar apellido:')
+      text, ok = QtGui.QInputDialog.getText(self, 'Filtrar por segunda columna', 'entrar valor:')
       if ok:
           return str(text)
 
